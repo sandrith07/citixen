@@ -1,0 +1,100 @@
+<ion-header>
+  <ion-toolbar class="toolbar">
+    <ion-title>
+      Dashboard CITIXEN
+    </ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="newTask()">
+        <ion-icon slot="start" name="add-circle-sharp"></ion-icon>
+        New Task
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-grid >
+    <ion-row>
+      <ion-col  size-md>
+        <ion-toolbar>
+          <ion-title class="titles">Pendientes</ion-title>
+        </ion-toolbar>
+        <div class="grid" *ngIf="CountTaskNOTerminated() == true" color="light">
+          <ng-container *ngFor="let item of listask; let i = index">
+          <ion-card type="ios" *ngIf="item.estado != true" class="{{item.prioridad}}" (click)="detailTask(item)">
+            <ion-toolbar color="{{item.prioridad}}">
+              <ion-title><strong>{{item.nombre}}</strong></ion-title>
+              <ion-buttons slot="end">
+                <ion-button color="light" (click)="deleteTask(i)">
+                  <ion-icon slot="end" name="trash"></ion-icon>
+                </ion-button>
+                <ion-button color="light" (click)="completeTask(i)">
+                  <ion-icon slot="end" name="checkbox"></ion-icon>
+                </ion-button>
+              </ion-buttons>
+            </ion-toolbar>
+            <ion-card-content>
+              <h5> <strong>Responsable:</strong> {{item.responsable}}</h5>
+              <h6> <strong>Prioridad:</strong> {{item.prioridad}}</h6>
+              <p class="ion-text-justify">
+                <strong>Descripción:</strong> {{item.descripcion.length > 160 ? (item.descripcion | slice: 0:160) + '...' : item.descripcion }}
+              </p>
+            </ion-card-content>
+          </ion-card>
+        </ng-container>
+        </div>
+        <div class="grid ion-text-center"  *ngIf="CountTaskNOTerminated() == false">
+          <ion-card>
+            <ion-card-content class="icon-vacio">
+              <ion-icon slot="end"  name="happy-outline"></ion-icon>
+              <p>
+                <strong>No tienes tareas pendientes</strong>
+              </p>
+            </ion-card-content>
+          </ion-card>
+        </div>
+      </ion-col>
+      <ion-col size-md> 
+        <ion-toolbar>
+          <ion-title class="titles">Terminadas</ion-title>
+          <ion-buttons slot="end">
+            <ion-button color="black" (click)="deleteAllTasks()">
+              <ion-icon slot="end" name="trash"></ion-icon>
+            </ion-button>
+          </ion-buttons>
+        </ion-toolbar>
+        <div class="grid" *ngIf="CountTaskTerminated() == true"  color="light">
+          <ng-container *ngFor="let item of listask; let i = index">
+          <ion-card type="ios" *ngIf="item.estado == true" class="terminado" (click)="detailTask(item)">
+            <ion-toolbar color="{{item.prioridad}}">
+              <ion-title><strong>{{item.nombre}}</strong></ion-title>
+              <ion-buttons slot="end">
+                <ion-button color="light" (click)="deleteTask(i)">
+                  <ion-icon slot="end" name="close"></ion-icon>
+                </ion-button>
+              </ion-buttons>
+            </ion-toolbar>
+            <ion-card-content>
+              <h5> <strong>Responsable:</strong> {{item.responsable}}</h5>
+              <h6> <strong>Prioridad:</strong> {{item.prioridad}}</h6>
+              <p class="ion-text-justify">
+                <strong>Descripción:</strong> {{item.descripcion.length > 40 ? (item.descripcion | slice: 0:40) + '...' : item.descripcion }}
+              </p>
+            </ion-card-content>
+          </ion-card>
+        </ng-container>
+        </div>
+        <div class="grid ion-text-center"  *ngIf="CountTaskTerminated() == false">
+          <ion-card>
+            <ion-card-content class="icon-vacio">
+              <ion-icon slot="end"  name="warning-outline"></ion-icon>
+              <p>
+                <strong>No hay tareas realizadas</strong>
+              </p>
+            </ion-card-content>
+          </ion-card>
+        </div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>
